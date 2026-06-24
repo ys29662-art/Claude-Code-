@@ -192,6 +192,45 @@
   footer{max-width:1320px;margin:0 auto;padding:40px 30px;color:var(--muted);font-size:14px;
     display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:40px}
 
+  /* ---------- GALLERY ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+  .tile{
+    position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;
+    border:1px solid var(--line);cursor:pointer;
+  }
+  .tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .tile:hover img{transform:scale(1.05)}
+  /* gradient placeholder shown until/if a real photo is dropped in */
+  .tile .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.5);
+    font-family:"Poppins";font-size:13px;letter-spacing:.04em;
+    background:linear-gradient(145deg,rgba(63,163,77,.5),rgba(181,137,79,.4))}
+  .tile:nth-child(2) .ph{background:linear-gradient(145deg,rgba(167,224,90,.45),rgba(63,163,77,.5))}
+  .tile:nth-child(3) .ph{background:linear-gradient(145deg,rgba(181,137,79,.5),rgba(94,194,100,.4))}
+  .tile:nth-child(4) .ph{background:linear-gradient(145deg,rgba(94,194,100,.45),rgba(181,137,79,.45))}
+  .tile:nth-child(5) .ph{background:linear-gradient(145deg,rgba(63,163,77,.55),rgba(167,224,90,.4))}
+  .tile:nth-child(6) .ph{background:linear-gradient(145deg,rgba(181,137,79,.45),rgba(63,163,77,.5))}
+  .tile .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 16px 14px;font-size:13.5px;font-weight:600;
+    font-family:"Poppins";color:#fff;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);z-index:2}
+
+  /* ---------- MAP ---------- */
+  .map-wrap{margin-top:44px;border:1px solid var(--line);border-radius:22px;overflow:hidden;height:380px;background:var(--panel)}
+  .map-wrap iframe{width:100%;height:100%;border:0;filter:grayscale(.2) contrast(1.05)}
+
+  /* ---------- FORM ---------- */
+  .quote-form{display:grid;gap:16px;margin-top:8px}
+  .field{display:grid;gap:7px}
+  .field label{font-size:13px;color:var(--muted);font-weight:600}
+  .field input,.field select,.field textarea{
+    width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;color:var(--text);font-family:inherit;font-size:15px;transition:border-color .2s,background .2s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:none;border-color:var(--green-bright);background:rgba(255,255,255,.06)}
+  .field textarea{resize:vertical;min-height:96px}
+  .field select option{background:#0d120d}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .form-note{color:var(--muted);font-size:13px}
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:1024px){
     .nav .links{display:none}
@@ -206,7 +245,9 @@
   @media (max-width:760px){
     body{padding:10px}
     .cols-3{grid-template-columns:1fr}
+    .gallery{grid-template-columns:1fr 1fr}
     .contact{grid-template-columns:1fr;padding:34px}
+    .row-2{grid-template-columns:1fr}
     .nav{padding:18px}
     .fc-stat{font-size:48px}
   }
@@ -229,8 +270,8 @@
       <div class="links">
         <a href="#" class="active">Home</a>
         <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
         <a href="#reviews">Reviews</a>
-        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
       <a href="#contact"><button class="btn btn-light">Get a Free Quote</button></a>
@@ -322,6 +363,22 @@
     </div>
   </section>
 
+  <!-- GALLERY -->
+  <section class="block" id="gallery" style="padding-top:0">
+    <span class="eyebrow">Recent work</span>
+    <h2 class="h2">Projects across the Midlands</h2>
+    <p class="lead">A snapshot of recent paving, turfing and garden transformations. Swap these tiles for your own photos — replace each tile's <code>&lt;img src&gt;</code> with your image URL.</p>
+    <div class="gallery">
+      <!-- To use a real photo: set src to your image and remove the .ph div -->
+      <figure class="tile"><img alt="Indian sandstone patio installation" src="" onerror="this.style.display='none'"><span class="ph">Sandstone Patio</span><figcaption class="cap">Indian Sandstone Patio · Coventry</figcaption></figure>
+      <figure class="tile"><img alt="Porcelain paving with clean lines" src="" onerror="this.style.display='none'"><span class="ph">Porcelain Paving</span><figcaption class="cap">Porcelain Paving · Nuneaton</figcaption></figure>
+      <figure class="tile"><img alt="Freshly laid Rolawn Medallion turf lawn" src="" onerror="this.style.display='none'"><span class="ph">New Turf Lawn</span><figcaption class="cap">Rolawn Medallion Turf</figcaption></figure>
+      <figure class="tile"><img alt="Artificial Astro turf garden" src="" onerror="this.style.display='none'"><span class="ph">Astro Turf</span><figcaption class="cap">Astro Turf · Warwickshire</figcaption></figure>
+      <figure class="tile"><img alt="Limestone paving pathway" src="" onerror="this.style.display='none'"><span class="ph">Limestone Path</span><figcaption class="cap">Limestone Pathway</figcaption></figure>
+      <figure class="tile"><img alt="Full garden landscaping transformation" src="" onerror="this.style.display='none'"><span class="ph">Garden Makeover</span><figcaption class="cap">Full Garden Makeover</figcaption></figure>
+    </div>
+  </section>
+
   <!-- REVIEWS -->
   <section class="block" id="reviews" style="padding-top:0">
     <span class="eyebrow">Reviews</span>
@@ -349,18 +406,58 @@
         <span class="eyebrow">Get in touch</span>
         <h2>Let's bring your garden to life.</h2>
         <p class="lead" style="margin-top:14px">A well-established, family-run business serving Coventry, Warwickshire and the East &amp; West Midlands since 2011. Friendly advice and free, no-obligation quotes.</p>
+        <div class="info-list" style="margin-top:26px">
+          <div><span class="k">Phone</span><span>07534 872838</span></div>
+          <div><span class="k">Address</span><span>4 Shepperton Ct, Coventry CV11 4NP</span></div>
+          <div><span class="k">Hours</span><span>Open 24 hours</span></div>
+          <div><span class="k">Areas</span><span>West Midlands &amp; nearby areas</span></div>
+          <div><span class="k">Web</span><span>greenerlandscapes.co.uk</span></div>
+        </div>
         <div class="contact-actions">
           <a href="tel:07534872838"><button class="btn btn-light">Call 07534 872838</button></a>
           <a href="https://greenerlandscapes.co.uk" target="_blank" rel="noopener"><button class="btn btn-ghost">Visit website</button></a>
         </div>
       </div>
-      <div class="info-list">
-        <div><span class="k">Phone</span><span>07534 872838</span></div>
-        <div><span class="k">Address</span><span>4 Shepperton Ct, Coventry CV11 4NP</span></div>
-        <div><span class="k">Hours</span><span>Open 24 hours</span></div>
-        <div><span class="k">Areas</span><span>West Midlands &amp; nearby areas</span></div>
-        <div><span class="k">Web</span><span>greenerlandscapes.co.uk</span></div>
-      </div>
+
+      <!-- Quote form. To receive submissions, replace the action with your
+           Formspree/Getform endpoint (e.g. https://formspree.io/f/your-id). -->
+      <form class="quote-form" action="https://formspree.io/f/your-form-id" method="POST">
+        <h3 style="font-family:'Poppins';font-size:20px;font-weight:600">Request a free quote</h3>
+        <div class="row-2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" placeholder="07…" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="service">Service needed</label>
+          <select id="service" name="service">
+            <option>Patios &amp; Paving</option>
+            <option>Turfing</option>
+            <option>Astro Turf</option>
+            <option>Full garden makeover</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Tell us about your project</label>
+          <textarea id="message" name="message" placeholder="Rough size, location, and what you're after…"></textarea>
+        </div>
+        <button class="btn btn-light" type="submit" style="justify-self:start">Send request</button>
+        <p class="form-note">We'll get back to you with a free, no-obligation quote. Prefer to talk? Call 07534 872838.</p>
+      </form>
+    </div>
+
+    <!-- MAP: embedded Google Map of the Coventry address -->
+    <div class="map-wrap">
+      <iframe
+        title="Greener Gardening and Landscaping Ltd location — 4 Shepperton Ct, Coventry CV11 4NP"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+        src="https://maps.google.com/maps?q=4%20Shepperton%20Ct%2C%20Coventry%20CV11%204NP&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
     </div>
   </section>
 
