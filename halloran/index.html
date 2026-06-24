@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0c0a09" />
+<title>HALLORAN — Watchmakers of Clerkenwell, London | Est. 1887</title>
+<meta name="description" content="Halloran of London. Mechanical wristwatches made by hand in Clerkenwell since 1887. Time, kept in confidence." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="HALLORAN — Watchmakers of Clerkenwell, London" />
+<meta property="og:description" content="Mechanical wristwatches made by hand in Clerkenwell since 1887." />
+<meta property="og:type" content="website" />
+
+<!-- Fonts: preconnect + display swap for fast, flash-free loading -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     ============================================================ */
+  :root{
+    --ink:        #0c0a09;   /* near-black background      */
+    --ink-2:      #161210;   /* raised surfaces            */
+    --ink-3:      #1c1917;   /* cards                      */
+    --stone:      #44403c;   /* borders / muted strokes    */
+    --bone:       #f5f1ea;   /* primary light text         */
+    --bone-dim:   #b8afa3;   /* secondary text             */
+    --gold:       #caa253;   /* brass accent               */
+    --gold-soft:  #e7c98a;   /* highlight                  */
+    --gold-deep:  #8a6d2f;   /* shadow side of gold        */
+
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --maxw: 1240px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-soft: cubic-bezier(.4,0,.2,1);
+
+    --z-nav: 50;
+    --z-overlay: 40;
+  }
+
+  /* ============================================================
+     RESET
+     ============================================================ */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::selection{background:var(--gold);color:var(--ink)}
+
+  /* Film-grain + vignette atmosphere for cinematic depth */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background:radial-gradient(120% 120% at 50% 0%, transparent 55%, rgba(0,0,0,.55) 100%);
+    mix-blend-mode:multiply;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============================================================
+     LAYOUT HELPERS
+     ============================================================ */
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(1.25rem,5vw,3rem)}
+  .eyebrow{
+    font-family:var(--sans);font-weight:500;font-size:.72rem;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--gold);
+    display:inline-flex;align-items:center;gap:.9rem;
+  }
+  .eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .section{position:relative;z-index:2;padding-block:clamp(5rem,11vw,9rem)}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:-.01em}
+  .display{font-size:clamp(2.6rem,8vw,6.4rem);font-weight:400}
+  .h2{font-size:clamp(2rem,5vw,3.6rem)}
+  .lede{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--bone-dim);max-width:60ch;font-weight:300}
+  .gold-ital{font-style:italic;color:var(--gold-soft)}
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .btn{
+    --pad:1rem 2.1rem;
+    display:inline-flex;align-items:center;gap:.7rem;
+    padding:var(--pad);font-family:var(--sans);font-size:.78rem;font-weight:500;
+    letter-spacing:.18em;text-transform:uppercase;border-radius:2px;
+    transition:transform .4s var(--ease), background .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
+    will-change:transform;position:relative;overflow:hidden;
+  }
+  .btn svg{transition:transform .4s var(--ease)}
+  .btn-gold{background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:var(--ink);box-shadow:0 10px 30px -12px rgba(202,162,83,.6)}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -14px rgba(202,162,83,.75)}
+  .btn-gold:hover svg{transform:translateX(4px)}
+  .btn-ghost{border:1px solid var(--stone);color:var(--bone)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-soft);transform:translateY(-2px)}
+  .btn:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);
+    transition:background .5s var(--ease), backdrop-filter .5s var(--ease), border-color .5s var(--ease), padding .5s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  .nav.scrolled{
+    background:rgba(12,10,9,.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom-color:rgba(68,64,60,.5);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding-block:1.3rem}
+  .nav.scrolled .nav-inner{padding-block:.95rem}
+  .brand{font-family:var(--serif);font-size:1.5rem;font-weight:500;letter-spacing:.42em;padding-left:.42em}
+  .brand span{color:var(--gold)}
+  .nav-links{display:flex;gap:2.4rem;align-items:center}
+  .nav-links a{
+    font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-dim);
+    font-weight:400;position:relative;padding-block:.4rem;transition:color .3s var(--ease);
+  }
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .4s var(--ease)}
+  .nav-links a:hover{color:var(--bone)}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{padding:.7rem 1.4rem !important;font-size:.7rem !important}
+  .burger{display:none;width:44px;height:44px;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+  .burger span{width:24px;height:1.5px;background:var(--bone);transition:.35s var(--ease)}
+  .burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+  .mobile-menu{
+    position:fixed;inset:0;z-index:var(--z-overlay);
+    background:rgba(12,10,9,.97);backdrop-filter:blur(20px);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;
+    opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s var(--ease);
+  }
+  .mobile-menu.open{opacity:1;visibility:visible}
+  .mobile-menu a{font-family:var(--serif);font-size:2rem;color:var(--bone-dim);transition:color .3s}
+  .mobile-menu a:hover{color:var(--gold)}
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:center;z-index:2;overflow:hidden}
+  .hero-glow{
+    position:absolute;top:50%;left:62%;width:min(85vw,820px);aspect-ratio:1;transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(202,162,83,.16), rgba(202,162,83,.05) 40%, transparent 68%);
+    filter:blur(8px);pointer-events:none;animation:breathe 9s var(--ease-soft) infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;width:100%}
+  .hero-copy{max-width:34rem}
+  .hero h1{margin:1.6rem 0 1.7rem}
+  .hero h1 .line{display:block;overflow:hidden}
+  .hero h1 .line > span{display:block;transform:translateY(110%);transition:transform 1s var(--ease)}
+  .hero.in h1 .line:nth-child(1) > span{transition-delay:.15s}
+  .hero.in h1 .line:nth-child(2) > span{transition-delay:.3s}
+  .hero.in h1 .line > span{transform:translateY(0)}
+  .hero-fade{opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease) .7s, transform 1s var(--ease) .7s}
+  .hero.in .hero-fade{opacity:1;transform:none}
+  .hero-cta-row{display:flex;gap:1rem;margin-top:2.4rem;flex-wrap:wrap}
+  .hero-meta{display:flex;gap:2.4rem;margin-top:3.4rem;flex-wrap:wrap}
+  .hero-meta div{border-left:1px solid var(--stone);padding-left:1.1rem}
+  .hero-meta .n{font-family:var(--serif);font-size:1.7rem;color:var(--gold-soft);line-height:1}
+  .hero-meta .l{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone-dim);margin-top:.45rem}
+
+  .hero-watch{justify-self:center;position:relative;opacity:0;transform:scale(.85) rotate(-6deg);transition:opacity 1.4s var(--ease) .35s, transform 1.4s var(--ease) .35s}
+  .hero.in .hero-watch{opacity:1;transform:none}
+  .scroll-cue{
+    position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:.7rem;
+    font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--bone-dim);
+    opacity:0;transition:opacity 1s 1.4s;
+  }
+  .hero.in .scroll-cue{opacity:.8}
+  .scroll-cue .bar{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden}
+  .scroll-cue .bar::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--gold-soft);animation:trickle 2.2s var(--ease) infinite}
+  @keyframes trickle{0%{top:-50%}100%{top:100%}}
+
+  /* ============================================================
+     SVG WATCH (hand-built, reusable)
+     ============================================================ */
+  .watch{width:min(78vw,420px)}
+  .watch .second-hand{transform-box:fill-box;transform-origin:center;animation:tick 60s steps(60) infinite}
+  @keyframes tick{to{transform:rotate(360deg)}}
+  .watch .glint{transform-box:fill-box;transform-origin:center;animation:sweep 6s var(--ease-soft) infinite}
+  @keyframes sweep{0%,100%{opacity:0}50%{opacity:.5}}
+
+  /* ============================================================
+     MARQUEE
+     ============================================================ */
+  .marquee{border-block:1px solid rgba(68,64,60,.5);padding-block:1.5rem;overflow:hidden;position:relative;z-index:2;background:var(--ink-2)}
+  .marquee-track{display:flex;gap:4rem;white-space:nowrap;width:max-content;animation:slide 38s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee span{font-family:var(--serif);font-size:1.4rem;font-style:italic;color:var(--bone-dim);display:inline-flex;align-items:center;gap:4rem}
+  .marquee span::after{content:"✦";color:var(--gold);font-style:normal;font-size:.8rem}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal[data-d="1"]{transition-delay:.12s}
+  .reveal[data-d="2"]{transition-delay:.24s}
+  .reveal[data-d="3"]{transition-delay:.36s}
+
+  /* ============================================================
+     HERITAGE
+     ============================================================ */
+  .heritage-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,6vw,6rem);align-items:center}
+  .heritage-copy p{margin-top:1.6rem;color:var(--bone-dim)}
+  .sig{font-family:var(--serif);font-style:italic;font-size:1.8rem;color:var(--gold-soft);margin-top:2.2rem}
+  .heritage-visual{position:relative;aspect-ratio:4/5;border:1px solid var(--stone);overflow:hidden;background:
+    radial-gradient(120% 80% at 70% 10%, rgba(202,162,83,.14), transparent 55%),
+    linear-gradient(160deg,var(--ink-3),var(--ink))}
+  .heritage-visual .stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .heritage-visual .est{position:absolute;bottom:1.6rem;left:1.6rem;font-family:var(--serif);font-size:1.1rem;letter-spacing:.3em;color:var(--bone-dim)}
+  .heritage-visual .est b{color:var(--gold);font-weight:500}
+
+  /* ============================================================
+     COLLECTION
+     ============================================================ */
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:3.5rem}
+  .sec-head .lede{margin-top:1.2rem}
+  .collection{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .piece{
+    position:relative;border:1px solid var(--stone);background:linear-gradient(180deg,var(--ink-3),var(--ink-2));
+    padding:2.5rem 2rem 2rem;border-radius:3px;overflow:hidden;
+    transition:transform .55s var(--ease),border-color .55s var(--ease),box-shadow .55s var(--ease);
+    cursor:pointer;
+  }
+  .piece::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 0%, rgba(202,162,83,.12),transparent 60%);opacity:0;transition:opacity .55s var(--ease)}
+  .piece:hover{transform:translateY(-8px);border-color:rgba(202,162,83,.5);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+  .piece:hover::before{opacity:1}
+  .piece:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+  .piece .watch-wrap{display:flex;justify-content:center;padding-block:1rem 2rem;position:relative;z-index:1}
+  .piece .watch-wrap .watch{width:min(60vw,210px);transition:transform .6s var(--ease)}
+  .piece:hover .watch-wrap .watch{transform:scale(1.06) rotate(2deg)}
+  .piece .ref{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  .piece h3{font-size:1.9rem;margin:.5rem 0 .3rem}
+  .piece .desc{font-size:.9rem;color:var(--bone-dim);min-height:3.2em}
+  .piece .foot{display:flex;justify-content:space-between;align-items:center;margin-top:1.6rem;padding-top:1.3rem;border-top:1px solid rgba(68,64,60,.6)}
+  .piece .price{font-family:var(--serif);font-size:1.35rem;color:var(--bone)}
+  .piece .arrow{width:38px;height:38px;border:1px solid var(--stone);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.45s var(--ease)}
+  .piece:hover .arrow{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+  .piece:hover .arrow svg{transform:translateX(2px)}
+
+  /* ============================================================
+     CRAFT — numbers + detail
+     ============================================================ */
+  .craft{background:var(--ink-2);border-block:1px solid rgba(68,64,60,.5)}
+  .craft-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2.5rem,6vw,5rem);align-items:center}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem 2rem;margin-top:3rem}
+  .stat .num{font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);color:var(--gold-soft);line-height:1;display:flex;align-items:baseline}
+  .stat .num .suf{font-size:1.4rem;color:var(--gold);margin-left:.2rem}
+  .stat .cap{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-dim);margin-top:.7rem}
+  .craft-detail{aspect-ratio:1;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 35% 30%, rgba(202,162,83,.2), transparent 60%), conic-gradient(from 0deg, #1a1613, #2a221a, #1a1613, #2a221a, #1a1613);
+    border:1px solid var(--stone);overflow:hidden}
+  .craft-detail::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 80px rgba(0,0,0,.7)}
+
+  /* ============================================================
+     ATELIER / CONTACT
+     ============================================================ */
+  .atelier-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,6vw,5rem)}
+  .info-row{display:flex;gap:1.2rem;padding-block:1.6rem;border-bottom:1px solid rgba(68,64,60,.5);align-items:flex-start}
+  .info-row .ic{color:var(--gold);flex-shrink:0;margin-top:.2rem}
+  .info-row .k{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone-dim)}
+  .info-row .v{font-family:var(--serif);font-size:1.25rem;margin-top:.2rem}
+  form{display:grid;gap:1.2rem}
+  .field{position:relative}
+  .field label{position:absolute;left:1rem;top:1rem;font-size:.95rem;color:var(--bone-dim);transition:.3s var(--ease);pointer-events:none}
+  .field input,.field textarea{
+    width:100%;background:var(--ink-3);border:1px solid var(--stone);border-radius:3px;
+    padding:1rem;color:var(--bone);font-family:var(--sans);font-size:.95rem;font-weight:300;transition:border-color .3s,box-shadow .3s;
+  }
+  .field textarea{resize:vertical;min-height:120px}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(202,162,83,.12)}
+  .field input:focus+label,.field input:not(:placeholder-shown)+label,
+  .field textarea:focus+label,.field textarea:not(:placeholder-shown)+label{
+    top:-.55rem;left:.7rem;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:var(--ink-3);padding-inline:.4rem
+  }
+  .form-note{font-size:.78rem;color:var(--bone-dim);margin-top:.3rem}
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer{background:var(--ink);border-top:1px solid rgba(68,64,60,.5);position:relative;z-index:2}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-block:4.5rem 3rem}
+  .foot-brand{font-family:var(--serif);font-size:2rem;letter-spacing:.3em;margin-bottom:1.2rem}
+  .foot-brand span{color:var(--gold)}
+  .foot-col h4{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;font-family:var(--sans);font-weight:500}
+  .foot-col a{display:block;color:var(--bone-dim);font-size:.92rem;padding-block:.45rem;transition:color .3s,padding-left .3s}
+  .foot-col a:hover{color:var(--gold-soft);padding-left:.4rem}
+  .foot-bar{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;padding-block:1.8rem;border-top:1px solid rgba(68,64,60,.5);font-size:.78rem;color:var(--bone-dim)}
+  .socials{display:flex;gap:.7rem}
+  .socials a{width:40px;height:40px;border:1px solid var(--stone);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.4s var(--ease)}
+  .socials a:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media(max-width:980px){
+    .hero-grid,.heritage-grid,.craft-grid,.atelier-grid{grid-template-columns:1fr}
+    .hero-watch{grid-row:1;margin-bottom:1rem}
+    .hero-copy{max-width:none}
+    .collection{grid-template-columns:1fr 1fr}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .craft-detail{max-width:380px;margin-inline:auto}
+  }
+  @media(max-width:680px){
+    .nav-links{display:none}
+    .burger{display:flex}
+    .collection{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .hero-meta{gap:1.5rem}
+    .stats{grid-template-columns:1fr 1fr}
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition-duration:.01ms !important}
+    .reveal,.hero-fade,.hero-watch{opacity:1 !important;transform:none !important}
+    .hero h1 .line > span{transform:none !important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav" id="nav" aria-label="Primary">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand" aria-label="Halloran, home">HALL<span>O</span>RAN</a>
+    <div class="nav-links">
+      <a href="#heritage">Heritage</a>
+      <a href="#collection">Collection</a>
+      <a href="#craft">Craft</a>
+      <a href="#atelier">Atelier</a>
+      <a href="#atelier" class="btn btn-gold nav-cta">Book a Viewing</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#heritage">Heritage</a>
+  <a href="#collection">Collection</a>
+  <a href="#craft">Craft</a>
+  <a href="#atelier">Atelier</a>
+  <a href="#atelier" class="btn btn-gold" style="margin-top:1rem">Book a Viewing</a>
+</div>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero" id="top">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow hero-fade">Clerkenwell, London · Est. 1887</span>
+        <h1 class="display">
+          <span class="line"><span>Time, kept</span></span>
+          <span class="line"><span>in <em class="gold-ital">confidence.</em></span></span>
+        </h1>
+        <p class="lede hero-fade">For five generations, Halloran has built mechanical wristwatches by hand in the old watchmaking quarter of London — each one assembled, regulated, and signed by a single craftsman.</p>
+        <div class="hero-cta-row hero-fade">
+          <a href="#collection" class="btn btn-gold">Discover the Collection
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#heritage" class="btn btn-ghost">Our Story</a>
+        </div>
+        <div class="hero-meta hero-fade">
+          <div><div class="n">137</div><div class="l">Years of practice</div></div>
+          <div><div class="n">5</div><div class="l">Generations</div></div>
+          <div><div class="n">In-house</div><div class="l">Movements</div></div>
+        </div>
+      </div>
+      <div class="hero-watch" aria-hidden="true">
+        <svg class="watch" viewBox="0 0 300 300" role="img" aria-label="Halloran wristwatch">
+          <defs>
+            <radialGradient id="case" cx="38%" cy="32%" r="75%">
+              <stop offset="0%" stop-color="#e7c98a"/><stop offset="45%" stop-color="#caa253"/>
+              <stop offset="80%" stop-color="#8a6d2f"/><stop offset="100%" stop-color="#5e4a20"/>
+            </radialGradient>
+            <radialGradient id="dial" cx="42%" cy="36%" r="72%">
+              <stop offset="0%" stop-color="#23201d"/><stop offset="60%" stop-color="#141210"/><stop offset="100%" stop-color="#0a0908"/>
+            </radialGradient>
+            <linearGradient id="hand" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f1e3c0"/><stop offset="100%" stop-color="#caa253"/>
+            </linearGradient>
+            <linearGradient id="crystal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="rgba(255,255,255,.18)"/><stop offset="40%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+          <!-- crown -->
+          <rect x="285" y="142" width="14" height="16" rx="2" fill="url(#case)"/>
+          <!-- case -->
+          <circle cx="150" cy="150" r="130" fill="url(#case)"/>
+          <circle cx="150" cy="150" r="118" fill="#0a0908"/>
+          <circle cx="150" cy="150" r="112" fill="url(#dial)"/>
+          <!-- minute track + indices (filled by JS) -->
+          <g stroke="#6b6055"><g id="ticks"></g></g>
+          <g id="indices" fill="url(#hand)"></g>
+          <!-- brand on dial -->
+          <text x="150" y="112" text-anchor="middle" fill="#caa253" font-family="Cormorant Garamond, serif" font-size="15" letter-spacing="3">HALLORAN</text>
+          <text x="150" y="128" text-anchor="middle" fill="#8a7d6a" font-family="Inter, sans-serif" font-size="6.5" letter-spacing="2">LONDON · AUTOMATIQUE</text>
+          <!-- subdial -->
+          <circle cx="150" cy="196" r="26" fill="none" stroke="#3a342d" stroke-width="1"/>
+          <text x="150" y="200" text-anchor="middle" fill="#6b6055" font-family="Inter" font-size="7">60</text>
+          <!-- hands -->
+          <g stroke-linecap="round">
+            <line x1="150" y1="150" x2="150" y2="92" stroke="url(#hand)" stroke-width="6" transform="rotate(40 150 150)"/>
+            <line x1="150" y1="150" x2="150" y2="64" stroke="url(#hand)" stroke-width="4" transform="rotate(120 150 150)"/>
+            <line class="second-hand" x1="150" y1="170" x2="150" y2="78" stroke="#caa253" stroke-width="1.5"/>
+          </g>
+          <circle cx="150" cy="150" r="6" fill="#e7c98a"/>
+          <circle cx="150" cy="150" r="2.5" fill="#5e4a20"/>
+          <!-- crystal sheen -->
+          <path class="glint" d="M60 60 A130 130 0 0 1 240 70 L210 95 A100 100 0 0 0 85 90 Z" fill="url(#crystal)"/>
+          <circle cx="150" cy="150" r="112" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
+</header>
+
+<!-- ============================ MARQUEE ============================ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Hand-assembled in Clerkenwell</span><span>In-house calibre H.5</span>
+    <span>72-hour power reserve</span><span>Chronometer-certified</span>
+    <span>Lifetime servicing</span><span>Numbered &amp; signed</span>
+    <span>Hand-assembled in Clerkenwell</span><span>In-house calibre H.5</span>
+    <span>72-hour power reserve</span><span>Chronometer-certified</span>
+    <span>Lifetime servicing</span><span>Numbered &amp; signed</span>
+  </div>
+</div>
+
+<!-- ============================ HERITAGE ============================ -->
+<section class="section" id="heritage">
+  <div class="wrap heritage-grid">
+    <div class="heritage-copy reveal">
+      <span class="eyebrow">The House of Halloran</span>
+      <h2 class="h2" style="margin-top:1.4rem">A workshop that has<br>never moved <span class="gold-ital">street.</span></h2>
+      <p>In 1887, Edmund Halloran hung his sign on St John's Lane, in the heart of Clerkenwell — the quarter where London's finest movements have been finished for three centuries. We are still there.</p>
+      <p>Every Halloran is the work of one hand from first jewel to final regulation. We make a few hundred watches a year, not a few hundred thousand. That is the point. A Halloran is not bought to be replaced; it is wound each morning and passed on.</p>
+      <div class="sig">— Arthur Halloran, Fifth Generation</div>
+    </div>
+    <div class="heritage-visual reveal" data-d="1" aria-hidden="true">
+      <div class="stamp">
+        <svg width="58%" viewBox="0 0 300 300"><use href="#hallwatch"/></svg>
+      </div>
+      <div class="est">EST. <b>MDCCCLXXXVII</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- Hidden master SVG symbol so the watch can be reused without repeating markup -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="hallwatch" viewBox="0 0 300 300">
+    <circle cx="150" cy="150" r="130" fill="url(#case)"/>
+    <circle cx="150" cy="150" r="118" fill="#0a0908"/>
+    <circle cx="150" cy="150" r="112" fill="url(#dial)"/>
+    <text x="150" y="116" text-anchor="middle" fill="#caa253" font-family="Cormorant Garamond, serif" font-size="16" letter-spacing="3">HALLORAN</text>
+    <text x="150" y="132" text-anchor="middle" fill="#8a7d6a" font-family="Inter, sans-serif" font-size="6.5" letter-spacing="2">LONDON</text>
+    <g stroke-linecap="round">
+      <line x1="150" y1="150" x2="150" y2="100" stroke="url(#hand)" stroke-width="6" transform="rotate(310 150 150)"/>
+      <line x1="150" y1="150" x2="150" y2="70" stroke="url(#hand)" stroke-width="4" transform="rotate(65 150 150)"/>
+    </g>
+    <circle cx="150" cy="150" r="6" fill="#e7c98a"/>
+  </symbol>
+</svg>
+
+<!-- ============================ COLLECTION ============================ -->
+<section class="section" id="collection">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal">
+        <span class="eyebrow">The Collection</span>
+        <h2 class="h2" style="margin-top:1.2rem">Four references.<br>No compromises.</h2>
+      </div>
+      <p class="lede reveal" data-d="1">Each model is built to order and delivered with a hand-written timing certificate. Prices shown are guide retail in GBP.</p>
+    </div>
+
+    <div class="collection">
+      <article class="piece reveal" tabindex="0" aria-label="The Clerkenwell, from £6,400">
+        <div class="watch-wrap"><svg class="watch" viewBox="0 0 300 300"><use href="#hallwatch"/></svg></div>
+        <div class="ref">Ref. H-01</div>
+        <h3>The Clerkenwell</h3>
+        <p class="desc">The original three-hander. A 38mm rose-gold case over a smoked grey dial.</p>
+        <div class="foot">
+          <span class="price">from £6,400</span>
+          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+      <article class="piece reveal" data-d="1" tabindex="0" aria-label="The Regent, from £8,900">
+        <div class="watch-wrap"><svg class="watch" viewBox="0 0 300 300"><use href="#hallwatch"/></svg></div>
+        <div class="ref">Ref. H-02</div>
+        <h3>The Regent</h3>
+        <p class="desc">Small-seconds dress piece in white gold, with a guilloché centre.</p>
+        <div class="foot">
+          <span class="price">from £8,900</span>
+          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+      <article class="piece reveal" data-d="2" tabindex="0" aria-label="The Meridian, from £12,500">
+        <div class="watch-wrap"><svg class="watch" viewBox="0 0 300 300"><use href="#hallwatch"/></svg></div>
+        <div class="ref">Ref. H-03</div>
+        <h3>The Meridian</h3>
+        <p class="desc">A GMT for the traveller, tracking a second time zone in 24-hour gold.</p>
+        <div class="foot">
+          <span class="price">from £12,500</span>
+          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+      <article class="piece reveal" data-d="3" tabindex="0" aria-label="The Nocturne, from £24,000">
+        <div class="watch-wrap"><svg class="watch" viewBox="0 0 300 300"><use href="#hallwatch"/></svg></div>
+        <div class="ref">Ref. H-04 · Limited</div>
+        <h3>The Nocturne</h3>
+        <p class="desc">An open-worked tourbillon in platinum. Twelve pieces a year, each numbered.</p>
+        <div class="foot">
+          <span class="price">from £24,000</span>
+          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CRAFT ============================ -->
+<section class="section craft" id="craft">
+  <div class="wrap craft-grid">
+    <div class="reveal">
+      <span class="eyebrow">The Calibre H.5</span>
+      <h2 class="h2" style="margin-top:1.2rem">Movement, measured<br>in <span class="gold-ital">patience.</span></h2>
+      <p class="lede" style="margin-top:1.4rem">Our in-house automatic calibre takes a single watchmaker the better part of a week to assemble, finish, and regulate to chronometer tolerance. Nothing about it is hurried.</p>
+      <div class="stats">
+        <div class="stat reveal" data-d="1"><div class="num" data-count="72"><span class="v">0</span><span class="suf">h</span></div><div class="cap">Power reserve</div></div>
+        <div class="stat reveal" data-d="2"><div class="num" data-count="28800"><span class="v">0</span><span class="suf">vph</span></div><div class="cap">Beat rate</div></div>
+        <div class="stat reveal" data-d="1"><div class="num" data-count="237"><span class="v">0</span></div><div class="cap">Components</div></div>
+        <div class="stat reveal" data-d="2"><div class="num" data-count="31"><span class="v">0</span></div><div class="cap">Jewels</div></div>
+      </div>
+    </div>
+    <div class="craft-detail reveal" data-d="1" aria-hidden="true">
+      <svg width="74%" viewBox="0 0 300 300">
+        <use href="#hallwatch"/>
+        <g class="second-hand"><line x1="150" y1="175" x2="150" y2="60" stroke="#caa253" stroke-width="1.5" stroke-linecap="round"/></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ATELIER ============================ -->
+<section class="section" id="atelier">
+  <div class="wrap atelier-grid">
+    <div class="reveal">
+      <span class="eyebrow">Visit the Atelier</span>
+      <h2 class="h2" style="margin-top:1.2rem">Come and<br>be measured.</h2>
+      <p class="lede" style="margin-top:1.4rem">Halloran is sold by appointment only, from the bench where it is made. Tell us a little about the watch you are looking for, and we will write back within two working days.</p>
+
+      <div style="margin-top:2.5rem">
+        <div class="info-row">
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div><div class="k">The Workshop</div><div class="v">14 St John's Lane, Clerkenwell, London EC1M</div></div>
+        </div>
+        <div class="info-row">
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg></span>
+          <div><div class="k">Telephone</div><div class="v">+44 (0)20 7253 1887</div></div>
+        </div>
+        <div class="info-row">
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>
+          <div><div class="k">Enquiries</div><div class="v">atelier@halloran.london</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" data-d="1">
+      <form id="enquiry" novalidate>
+        <div class="field">
+          <input type="text" id="name" name="name" placeholder=" " required autocomplete="name" />
+          <label for="name">Your name</label>
+        </div>
+        <div class="field">
+          <input type="email" id="email" name="email" placeholder=" " required autocomplete="email" />
+          <label for="email">Email address</label>
+        </div>
+        <div class="field">
+          <input type="text" id="interest" name="interest" placeholder=" " />
+          <label for="interest">Reference of interest (optional)</label>
+        </div>
+        <div class="field">
+          <textarea id="message" name="message" placeholder=" " required></textarea>
+          <label for="message">Tell us what you are looking for</label>
+        </div>
+        <button type="submit" class="btn btn-gold" style="justify-content:center">Request an Appointment
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="form-note" id="formNote" role="status">We reply to every enquiry personally. No mailing lists, ever.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">HALL<span>O</span>RAN</div>
+        <p class="lede" style="font-size:1rem">Mechanical wristwatches, made by hand in Clerkenwell, London since 1887. Time, kept in confidence.</p>
+        <div class="socials" style="margin-top:1.6rem">
+          <a href="#" aria-label="Halloran on Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="Halloran on Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg></a>
+          <a href="#" aria-label="Halloran on X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23 22h-6.8l-5.3-7-6.1 7H1.7l8.2-9.3L1 2h7l4.8 6.4L18.9 2Zm-2.4 18h1.9L7.6 4H5.6l10.9 16Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#heritage">Heritage</a>
+        <a href="#collection">The Collection</a>
+        <a href="#craft">The Calibre</a>
+        <a href="#atelier">Visit the Atelier</a>
+      </div>
+      <div class="foot-col">
+        <h4>Service</h4>
+        <a href="#atelier">Book a Viewing</a>
+        <a href="#">Servicing &amp; Care</a>
+        <a href="#">Warranty</a>
+        <a href="#">Bespoke Commissions</a>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>© <span id="year">2026</span> Halloran of London Ltd. All rights reserved.</span>
+      <span>Privacy · Terms · Crafted in Clerkenwell, EC1</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- generate watch tick marks & indices (keeps HTML lean) ---- */
+  function buildDial(){
+    var ticks = document.getElementById("ticks");
+    var indices = document.getElementById("indices");
+    if(!ticks) return;
+    var t = "", idx = "", cx=150, cy=150;
+    for(var i=0;i<60;i++){
+      var a = i*6*Math.PI/180, r1=108, r2=(i%5===0)?98:103;
+      var x1=cx+r1*Math.sin(a), y1=cy-r1*Math.cos(a);
+      var x2=cx+r2*Math.sin(a), y2=cy-r2*Math.cos(a);
+      t += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke-width="'+(i%5===0?1.6:0.7)+'"/>';
+    }
+    for(var h=0;h<12;h++){
+      if(h===0||h===3||h===6||h===9){continue;}
+      var ah=h*30*Math.PI/180, rr=90;
+      var hx=150+rr*Math.sin(ah), hy=150-rr*Math.cos(ah);
+      idx += '<rect x="'+(hx-1.6).toFixed(1)+'" y="'+(hy-6).toFixed(1)+'" width="3.2" height="12" rx="1.4" transform="rotate('+(h*30)+' '+hx.toFixed(1)+' '+hy.toFixed(1)+')"/>';
+    }
+    ticks.innerHTML = t;
+    indices.innerHTML = idx;
+  }
+  buildDial();
+
+  /* ---- nav scroll state ---- */
+  var nav = document.getElementById("nav");
+  var onScroll = function(){ nav.classList.toggle("scrolled", window.scrollY > 40); };
+  onScroll();
+  window.addEventListener("scroll", onScroll, {passive:true});
+
+  /* ---- mobile menu ---- */
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mobileMenu");
+  function closeMenu(){ menu.classList.remove("open"); burger.classList.remove("open"); burger.setAttribute("aria-expanded","false"); document.body.style.overflow=""; }
+  burger.addEventListener("click", function(){
+    var open = menu.classList.toggle("open");
+    burger.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    document.body.style.overflow = open ? "hidden" : "";
+  });
+  menu.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", closeMenu); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeMenu(); });
+
+  /* ---- hero entrance ---- */
+  var hero = document.getElementById("top");
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ hero.classList.add("in"); }); });
+
+  /* ---- scroll reveal via IntersectionObserver ---- */
+  var reveals = document.querySelectorAll(".reveal");
+  if(rm || !("IntersectionObserver" in window)){
+    reveals.forEach(function(el){ el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:0.18, rootMargin:"0px 0px -8% 0px"});
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- count-up stats ---- */
+  function animateCount(el){
+    var target = parseInt(el.getAttribute("data-count"),10);
+    var span = el.querySelector(".v");
+    if(rm){ span.textContent = target.toLocaleString(); return; }
+    var start = performance.now(), dur = 1600;
+    function step(now){
+      var p = Math.min((now-start)/dur, 1);
+      var eased = 1 - Math.pow(1-p, 3);
+      span.textContent = Math.round(target*eased).toLocaleString();
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var counters = document.querySelectorAll("[data-count]");
+  if(rm || !("IntersectionObserver" in window)){
+    counters.forEach(animateCount);
+  } else {
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ animateCount(en.target); cio.unobserve(en.target); } });
+    }, {threshold:0.6});
+    counters.forEach(function(el){ cio.observe(el); });
+  }
+
+  /* ---- subtle hero parallax (pointer + scroll), motion-safe ---- */
+  if(!rm){
+    var watch = document.querySelector(".hero-watch");
+    var glow = document.querySelector(".hero-glow");
+    window.addEventListener("scroll", function(){
+      var y = window.scrollY;
+      if(y < window.innerHeight && watch){ watch.style.transform = "translateY("+(y*0.08)+"px)"; }
+    }, {passive:true});
+    window.addEventListener("pointermove", function(e){
+      if(window.innerWidth < 980) return;
+      var dx = (e.clientX/window.innerWidth - .5);
+      var dy = (e.clientY/window.innerHeight - .5);
+      if(glow){ glow.style.transform = "translate(calc(-50% + "+(dx*30)+"px), calc(-50% + "+(dy*30)+"px))"; }
+    });
+  }
+
+  /* ---- form (front-end only, graceful) ---- */
+  var form = document.getElementById("enquiry");
+  var note = document.getElementById("formNote");
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = form.name.value.trim(), email = form.email.value.trim(), msg = form.message.value.trim();
+    if(!name || !email || !msg || email.indexOf("@") < 1){
+      note.textContent = "Please add your name, a valid email, and a short note.";
+      note.style.color = "#e0a0a0";
+      return;
+    }
+    note.textContent = "Thank you, " + name.split(" ")[0] + ". The atelier will write back within two working days.";
+    note.style.color = "var(--gold-soft)";
+    form.reset();
+  });
+
+  /* ---- year ---- */
+  document.getElementById("year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
